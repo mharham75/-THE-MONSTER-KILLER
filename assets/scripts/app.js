@@ -6,18 +6,29 @@ const HEAL_VALUE = 20;
 let chosenMaxValue = 100;
 let currentMonsterHealth = chosenMaxValue ;
 let currentPlayerHealth = chosenMaxValue ;
+let hasBonusLife = true;
 
 adjustHealthBars(chosenMaxValue);
 
 function endRound(){
+    const initailPlayerHealth = currentPlayerHealth;
     const playerDamage = dealPlayerDamage(MONSTER_ATTACK_VALUE);
-        currentPlayerHealth -= playerDamage;
-        if(currentMonsterHealth<=0 && currentPlayerHealth>0)
-            alert('You won!');
-        else if(currentPlayerHealth <=0 && currentMonsterHealth>0)
-            alert('You Lost!');
-        else if(currentMonsterHealth<=0 && currentPlayerHealth<=0)
-            alert('You have a draw');
+    currentPlayerHealth -= playerDamage;
+
+    if(currentPlayerHealth <=0 && hasBonusLife){  //land a bonus life to user (once only) if he is dead
+        hasBonusLife = false;
+        removeBonusLife();
+        currentPlayerHealth = initailPlayerHealth;
+        setPlayerHealth(initailPlayerHealth);
+        alert('You would be dead but the bonus life saved you!');
+    }
+
+    if(currentMonsterHealth<=0 && currentPlayerHealth>0)
+        alert('You won!');
+    else if(currentPlayerHealth <=0 && currentMonsterHealth>0)
+        alert('You Lost!');
+    else if(currentMonsterHealth<=0 && currentPlayerHealth<=0)
+        alert('You have a draw');
 }
 
 function attackMonster(modeOfAttack){
